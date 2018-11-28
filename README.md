@@ -24,17 +24,19 @@ Everyone that wants to have a deeper knowledge on how containers are built and r
 
 
 
+---
+
 ## Tasks:
 
 * [Prerequisites](docs/00-prereqs.md)
 * [Installing needed packages](docs/01-packages.md)
-* [Preparing the container work directory](docs/02-container_workdir.md)
-* [Creating the Container Image](docs/03-container_image.md)
-* [Creating the "Container Layer"](docs/04-container_layer.md)
-* [Using Different namespaces](docs/05-namespaces.md)
-* [Setting up the container network](docs/06-network.md)
-* [Setting up cgroups for the new container](docs/01-cgroups.md)
-* [Setting up devices for the new container]()
+* [Preparing the container work directory](docs/01-container_workdir.md)
+* [Creating the Container Image](docs/02-container_image.md)
+* [Creating the "Container Layer"](docs/03-container_layer.md)
+* [Using Different namespaces](docs/04-namespaces.md)
+* [Setting up the container network](docs/05-network.md)
+* [Setting up cgroups for the new container](docs/06-cgroups.md)
+* [Setting up Storage Devices for the new container]()
 * [Setting up capabilities for the new container]()
 * [Setting up Security for the new container]()
 * [wrapping everything up]()
