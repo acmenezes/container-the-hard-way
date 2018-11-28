@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/alex/projects/container-the-hard-way","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
