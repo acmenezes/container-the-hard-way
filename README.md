@@ -28,8 +28,6 @@ Everyone that wants to have a deeper knowledge on how containers are built and r
 
 ## Tasks:
 
-* [Prerequisites](docs/00-prereqs.md)
-* [Installing needed packages](docs/01-packages.md)
 * [Preparing the container work directory](docs/01-container_workdir.md)
 * [Creating the Container Image](docs/02-container_image.md)
 * [Creating the "Container Layer"](docs/03-container_layer.md)
