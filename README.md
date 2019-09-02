@@ -12,7 +12,7 @@ I try to explain as much as I can or point to the right documentation or even ma
 
 * Vagrant image [Centos 7.5](https://app.vagrantup.com/generic/boxes/centos7)
 * Btrfs - To be used as storage driver for the writtable container layer.
-* bridge-utils package to build the container bridge by hand
+* bridge-utils package to inspect bridges and interfaces
 
 ---
 ## How to Use This Tutorial
@@ -34,7 +34,7 @@ How to do it:
 - run `cd container-the-hard-way`
 - run `vagrant up` and you should have a VM running for you in a couple of minutes
 
-If want to know how more about vagrant check Hashicorp's Vagrant docs [here](https://www.vagrantup.com/docs/index.html).
+If you would like to know more about vagrant check Hashicorp's Vagrant docs [here](https://www.vagrantup.com/docs/index.html).
 
 ---
 
