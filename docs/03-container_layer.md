@@ -1,6 +1,6 @@
 # Creating the Container Layer
 
-Now that we have the file system in our image directory let's create a snapshot of this image for the container layer or the top layer and call our new container instance littlebox:
+Now that we have the file system in our image directory let's create a snapshot of this image for the container layer and call our new container instance littlebox.
 
 First let's create a directory for our running containers:
 ```
@@ -41,9 +41,12 @@ Here we are actually seeing the same data that is in the img/alpine directory. W
 ```
 sudo su -c 'echo "CONTAINER DATA" >> /var/lib/containers/run/littlebox/THIS_IS_OUR_CONTAINER_DATA'
 ```
-export CONTAINER=/var/lib/containers/run/littlebox
 
-This is the time when we may do a little test with chroot:
+Let's copy the container path to a variable:
+```
+export CONTAINER=/var/lib/containers/run/littlebox
+```
+And finally do little test with chroot using alpine's sh:
 ```
 sudo chroot ${CONTAINER} sh
 / #
@@ -68,7 +71,7 @@ drwxr-xr-x    1 root     root            40 Sep 11 13:58 usr
 drwxr-xr-x    1 root     root            78 Sep 11 13:58 var
 
 ```
-Look that you can run Alpine exclusive things like apk:
+Look that you can run Alpine exclusive binaries from it's shell such as apk:
 ```
 apk --help
 
@@ -109,10 +112,7 @@ exit
 
 Next step:
 
-* [Using Different namespaces](05-namespaces.md)
+* [Using Different namespaces](04-namespaces.md)
 
----
-
-### References
 
 

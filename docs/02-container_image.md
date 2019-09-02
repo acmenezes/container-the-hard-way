@@ -2,10 +2,10 @@
 
 ## Create a btrfs subvolume
 
-A subvolume is an independent part of the file system capable of sharing it's file extents which gives us the possibility of taking snapshots of it. That is what enables us to create new layers based on top of others. Check the reference material at the end of the page to know more about btrfs subvolumes.
+A subvolume is an independent part of the file system capable of sharing it's file extents which gives us the possibility of taking snapshots of it. That is what enables us to create new layers based on top of others. Check the man page [`man btrfs-subvolume`](https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs-subvolume) to know more about btrfs subvolumes.
 
 
-Let's create our image directory and set our environment variables:
+Let's create our image directory as a subvolume inside our work directory and set our environment variables:
 ```
 export WORKDIR=/var/lib/containers
 sudo mkdir -p ${WORKDIR}/img
@@ -21,7 +21,7 @@ ID 256 gen 7 parent 5 top level 5 path img/alpine
 ---
 ## Let's download and extract an Alpine Linux image
 
-Here we could install any filesystem we want. For practical purposes I'm using one of the most popular container images, the alpine image. Keep in mind that you need to check the version and the url first from the alpine linux website. Below is the version that I was able to get during the time of creating this tutorial.
+Here we could install any filesystem we want. For practical purposes I'm using one of the most popular container images, the alpine image. Keep in mind that you need to check the version and the url first from the alpine linux website. Below is the version that I got at the creation of this tutorial.
 
 ```
 curl -s http://dl-cdn.alpinelinux.org/alpine/v3.8/releases/x86_64/alpine-minirootfs-3.8.1-x86_64.tar.gz | sudo tar xvzf - -C /var/lib/containers/img/alpine/
@@ -50,10 +50,4 @@ drwxr-xr-x. 1 root root  78 Sep 11 13:58 var
 ```
 Now Let's use this image to build the container layer:
 
-* [Creating the "Container Layer"](04-container_layer.md)
-
-
----
-## Reference Material on Container Layers and Storage Drivers
-
-* [man btrfs-subvolume](https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs-subvolume)
+* [Creating the "Container Layer"](03-container_layer.md)

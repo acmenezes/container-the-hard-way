@@ -1,12 +1,12 @@
 # Using Different Namespaces
 
-A namespace is created by a process unsharing its namespace. A namespace can then be made permanent by bind-mounting the ns file to some other place.
+A namespace is created for a process by "unsharing" it's namespace. A namespace can then be made permanent by bind-mounting the ns file to some other place.
 
 
-For the moment we have our container root file system in place. Now let's pick up a convenient program to run in the container. In this case nothing better than a simple bash terminal. To do that the first thing is running bash using separate namespaces for almost every task needed by a process except the user namespace. We do this by using the unshare command.
+For the moment we have our container's root file system in place. Now let's pick up a convenient program to run as the containerized application. In this case nothing better than a simple bash terminal. In oder to run it using separate namespaces we use the `unshare` command.
 
 ```
-unshare --mount --uts --ipc --net --pid --fork bash
+sudo unshare --mount --uts --ipc --net --pid --fork bash
 ```
 
 You will see that it seems that nothing happened. But let's take advantage of the uts namespace. Read below the definition of this namespace from the man pages:
@@ -21,7 +21,7 @@ exec bash
 ```
 Now we have a new hostname! If you ssh into your VM again using other terminal will you see that your host system didn't change a bit! Because the changes are happening inside the new namespaces.
 
-But for now you can see that your container still has access to files inside the host file system. Let's change it making the image file system the root "/" file system.
+For now you can see that your container still has access to files inside the host file system. Let's change it making the image file system the root "/" file system.
 
 First we need to mount our container directory on a directory placed in root. Create a directory named littlebox, create a bind mount and move it to the / path.
 ```
@@ -30,14 +30,17 @@ mount --bind /var/lib/containers/run/littlebox /var/lib/containers/run/littlebox
 mount --move /var/lib/containers/run/littlebox /littlebox
 ```
 Now we create an oldroot directory to place the mount point of the actual root file system on this mnt namespace. Remember, we are in isolated namespaces and the root file system can be switched by other root fs. So create the oldroot and then switch it with the new one:
+
+From now on for practical purposes let's become root  with `sudo su`
+
 ```
 cd /littlebox
 mkdir oldroot
 pivot_root . oldroot
 ```
-Now verify that you have the same content in your / path as your /littlebox. The mount point of the old root is in old root! Just do ls on those directories and you will see it!
+Now verify that you have the same content in your / path as your /littlebox. The mount point of the old root is in old root! Just do `ls` on those directories and you will see it!
 
-Finally we need to umount every old mounts from the host system. Again, go ahead, we're not doing this on the root namespace. We are doing this on the new namespace mnt.
+Finally we need to umount every old mounts from the host system. Again, go ahead, we're not doing this on the root namespace. We are doing this on the new mnt namespace.
 ```
 umount -a
 umount -l /oldroot
@@ -62,7 +65,9 @@ PID   USER     TIME  COMMAND
     1 root      0:00 bash
   106 root      0:00 ps faux
 ```
-Let's look on the host how the namespaces differ.
+
+Now open a new terminal and ssh to the host VM again.
+
 With the command lsns we can see the number of the inode where the namespace is "stored". This is for the current user and current process so you see vagrant and bash and all the accessible namespaces.
 
 ```
@@ -90,5 +95,6 @@ total 0
 4026532162 -r--r--r--. 1 root root 0 Nov 22 03:17 uts
 
 ```
-
+---
+* [Creating the network devices for our container](05-network.md)
 

@@ -1,45 +1,14 @@
 # Preparing the container work directory
 
-## Quick Review on Container Layers and Storage Drivers
-
-* AUFS
-* Device Mapper
-* Btrfs
-* Overlay2 FS
-* VFS
-
-#### AUFS
-
-
-
-#### Device Mapper
-
-Block Level
-Sparse Files vs Direct Write
-
-#### BTRFS
-
-In between AUFS and Btrfs
-
-#### Overlay2
-
-
-
-#### VFS
-Only for very old kernels
-Copy on Copy
-
----
-
 ## Preparing device and partition using btrfs format
-Let's take a look:
+
+If you used the Vagrant file you should see a device vdb like below:
 
 ```
 vagrant ssh
 sudo fdisk -l
 ```
 
-You should see a device vdb like:
 >Disk /dev/vdb: 0 MB, 197120 bytes, 385 sectors
 Units = sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
@@ -48,7 +17,7 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 Now let's create a partition:
 
 ```
-sudo fdisk /dev/dvb
+sudo fdisk /dev/vdb
                     
 Welcome to fdisk (util-linux 2.23.2).               
                                                            
@@ -58,19 +27,19 @@ Be careful before using the write command.
 Device does not contain a recognized partition table
 Building a new DOS disklabel with disk identifier 0xf657fe82.
                                                        
-Command (m for help): n                                       
+Command (m for help): n  -------> use n for a new partition.                                     
 Partition type:                                              
    p   primary (0 primary, 0 extended, 4 free)
    e   extended                          
-Select (default p): p                                                          
+Select (default p): p   --------> create a primary partition for the file system.                                                       
 Partition number (1-4, default 1): 1   
 First sector (2048-20971519, default 2048):
 Using default value 2048                                    
 Last sector, +sectors or +size{K,M,G} (2048-20971519, default 20971519):        
 Using default value 20971519                          
-Partition 1 of type Linux and of size 10 GiB is set
+Partition 1 of type Linux and of 1023 MiB is set
                                                                                  
-Command (m for help): w                                   
+Command (m for help): w  ------> type w to write your changes.                                 
 The partition table has been altered!            
                                                     
 Calling ioctl() to re-read partition table.             
@@ -83,7 +52,7 @@ sudo fdisk -l
 
 [...]
    Device Boot      Start         End      Blocks   Id  System
-/dev/vdb1            2048    20971519    10484736   83  Linux
+/dev/vdb1            2048    20971519     1047552   83  Linux
 ```
 ```
 lsblk
@@ -100,25 +69,42 @@ Let's format it!
 
 ```
 sudo mkfs.btrfs /dev/vdb1
-
 ```
-Let's create a proper directory on this container host to work with:
+You should see something like this:
+```
+btrfs-progs v4.9.1
+See http://btrfs.wiki.kernel.org for more information.
 
+Label:              (null)
+UUID:               3a53c1ce-869e-4f34-bc2e-b703b3cd0835
+Node size:          16384
+Sector size:        4096
+Filesystem size:    1023.00MiB
+Block group profiles:
+  Data:             single            8.00MiB
+  Metadata:         DUP              51.12MiB
+  System:           DUP               8.00MiB
+SSD detected:       no
+Incompat features:  extref, skinny-metadata
+Number of devices:  1
+Devices:
+   ID        SIZE  PATH
+    1  1023.00MiB  /dev/vdb1
+```
+
+Let's create a directory on the host VM for our containers:
 ```
 sudo mkdir -p /var/lib/containers/
 ```
 
-Finally let's setup our system to mount our btrfs volume on that path.
-
+Finally let's setup our system to mount our btrfs volume on that new path.
 Grab the UUID of our second partition:
 ```
 export UUID=$(lsblk --fs /dev/vdb1 | grep -v NAME | tr -s " " | cut -d " " -f 3)
-
 ```
 
-Add the your second partition to fstab for it to mount automatically.
-Replace the UUID below with yours:
-
+Let's add the second partition to fstab for it to mount automatically.
+Replace the UUID below with yours or use an environment variable:
 ```
 sudo su -c "echo 'UUID='${UUID}' /var/lib/containers/    btrfs   defaults        0 0' >> /etc/fstab"
 ```
@@ -132,10 +118,11 @@ If your file is good, finally "reload" fstab with:
 ```
 sudo mount -a
 ```
-Then make it private in order to isolate it from the rest of the system.
+Then make it private in order to isolate it from the rest of the system since we're going to create a new mount point namespace to move this one into.
 ```
 sudo mount --make-rprivate /var/lib/containers/
 ```
+
 Let's verify if it's mounted:
 ```
 df -h
@@ -162,6 +149,6 @@ tmpfs on /run/user/0 type tmpfs (rw,nosuid,nodev,relatime,seclabel,size=388092k,
 
 Now we have a btrfs partition properly mounted on /var/lib/containers/ that we can use as a work directory to build container images and create layers using the snapshot features of btrfs. Now comes the fun part:
 
-> [Creating the container Image](03-container_image.md)
+> [Creating the container Image](02-container_image.md)
 
 ---
