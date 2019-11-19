@@ -1,6 +1,6 @@
-# Container the Hard Way
+# Containers the Hard Way
 
-This tutorial was developed having in mind the geeky linux community and friends that would like to understand what is a container in a deeper level. That's achieved in a very simple way using just the necessary linux commands and operations that isolate an application or process using the concepts that gave birth to the container idea such as cgroups and namespaces. Using a layered file system approach we deal with volumes, images, processes, networking and more without a particular container runtime such as Docker, Containerd, Rkt, lxd/lxc etc.
+This tutorial was developed with the the geeky linux community and friends in mind who would like to understand the inner workings of a container at a deeper level. This is achieved simply by using linux commands and operations that isolate an application or process using the concepts that gave birth to the idea of containers such as cgroups and namespaces. Using a layered file system approach we explore volumes, images, processes, networking and more without a particular container runtime such as Docker, Containerd, Rkt, lxd/lxc etc.
 
 I try to explain as much as I can or point to the right documentation or even man pages to make things as clear as possible. Even though, this tutorial requires a lot of linux knowlegde and was not meant for linux beginners.
 
