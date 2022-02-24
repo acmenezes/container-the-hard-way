@@ -45,7 +45,7 @@ Don't forget to bring up the host end of this veth pair. Notice that it's down a
 ```
 
 ```
-sudo ip link set h5536 up
+sudo ip link set h${CPID} up
 ```
 And attach that connection to the bridge we've created:
 
@@ -71,8 +71,8 @@ ip link set lo up
 
 Let's use that veth interface (use the name you got from your system with the ip link command) and add an ip address on the same network where our bridge is:
 ```
-ip addr add dev c5536 10.0.0.2/16
-ip link set c5536 up
+ip addr add dev c${CPID} 10.0.0.2/16
+ip link set c${CPID} up
 ```
 
 We still need to configure at least a default route to be able to reach outside:
